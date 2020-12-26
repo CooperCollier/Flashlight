@@ -34,9 +34,12 @@ public abstract class Enemy : MonoBehaviour {
     public Rigidbody2D rigidbody2D;
     public ParticleSystem stunParticles;
 
+    public BoxCollider2D boxCollider2D;
+
 	//--------------------------------------------------------------------------------
 
     void Start() {
+        boxCollider2D = transform.GetComponent<BoxCollider2D>();
         rigidbody2D = transform.GetComponent<Rigidbody2D>();
         stunParticles = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
         stunParticles.Stop();

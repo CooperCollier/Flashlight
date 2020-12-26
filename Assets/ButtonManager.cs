@@ -77,9 +77,11 @@ public class ButtonManager : MonoBehaviour {
     }
 
     public void ShowEndCard() {
+        int money = Player.GetMoney();
         Time.timeScale = 0f;
         EndCard.SetActive(true);
         quitButton.SetActive(true);
+        EndCard.transform.GetChild(4).gameObject.GetComponent<Text>().text = money.ToString() + "$";
     }
 
     IEnumerator ShowRetryScreen() {

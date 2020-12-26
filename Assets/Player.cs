@@ -25,8 +25,9 @@ public class Player : MonoBehaviour {
     int maxFadeInTime = 2000;
     // gameStarted is true if the player has entered the house.
     bool gameStarted = false;
-    // timeToVanish is the number of frames it takes for the player to disssappear on death.
-    int timeToVanish = 150;
+    // timeToVanish is the number of frames it takes for the player to dissappear on death.
+    float maxTimeToVanish = 250f;
+    float timeToVanish;
 
     // dead is true if the player has died.
     public static bool dead;
@@ -104,8 +105,8 @@ public class Player : MonoBehaviour {
 
     	if (dead) { 
     		if (timeToVanish > 0) {
-        		timeToVanish -= 1;
-        		sprite.color = new Color(1f, 1f, 1f, (float) (timeToVanish * 0.05f));
+        		timeToVanish -= 1f;
+        		sprite.color = new Color(1f, 1f, 1f, (float) (timeToVanish / maxTimeToVanish));
         	}
         	return;
         }
@@ -190,6 +191,8 @@ public class Player : MonoBehaviour {
             startDark = true;
             fadeInTime = maxFadeInTime;
             other.enabled = false;
+        } if (other.tag == "Stairs") {
+            ChangeFloor();
         }
     }
 
@@ -206,6 +209,11 @@ public class Player : MonoBehaviour {
     	bleedParticles.Play();
     	rigidbody2D.isKinematic = true;
     	boxCollider2D.enabled = false;
+    	timeToVanish = maxTimeToVanish;
+    }
+
+    public void ChangeFloor() {
+        //...
     }
 
     //--------------------------------------------------------------------------------
