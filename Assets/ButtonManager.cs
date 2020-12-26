@@ -10,9 +10,11 @@ public class ButtonManager : MonoBehaviour {
 
 	public static bool paused;
     public static bool dead;
+    public static bool finished;
 
 	public GameObject pauseMenuUI;
     public GameObject retryMenuUI;
+    public GameObject EndCard;
 
     public GameObject resumeButton;
     public GameObject quitButton;
@@ -36,7 +38,7 @@ public class ButtonManager : MonoBehaviour {
     //--------------------------------------------------------------------------------
 
     void Update() {
-    	if (!paused && !dead) {
+    	if (!paused && !dead && !finished) {
     		pauseMenuUI.SetActive(false);
         	resumeButton.SetActive(false);
         	quitButton.SetActive(false);
@@ -45,6 +47,10 @@ public class ButtonManager : MonoBehaviour {
     		dead = true;
     		StartCoroutine(ShowRetryScreen());
     	}
+        if (Player.GetFinished()) {
+            finished = true;
+            ShowEndCard();
+        }
     }
 
     public void PauseGame() {
@@ -68,6 +74,12 @@ public class ButtonManager : MonoBehaviour {
     public void QuitGame() {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
+    }
+
+    public void ShowEndCard() {
+        Time.timeScale = 0f;
+        EndCard.SetActive(true);
+        quitButton.SetActive(true);
     }
 
     IEnumerator ShowRetryScreen() {

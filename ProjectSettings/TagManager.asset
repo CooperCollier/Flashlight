@@ -13,6 +13,7 @@ TagManager:
   - Gem2
   - GameStart
   - GameEnd
+  - BeginDarkness
   layers:
   - Default
   - TransparentFX
