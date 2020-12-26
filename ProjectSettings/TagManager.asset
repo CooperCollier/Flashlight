@@ -8,6 +8,9 @@ TagManager:
   - Coin
   - Battery
   - Stunner
+  - Door
+  - Gem1
+  - Gem2
   layers:
   - Default
   - TransparentFX
@@ -20,8 +23,8 @@ TagManager:
   - Player
   - Door
   - Walls
-  - 
-  - 
+  - Stunner
+  - Enemies
   - 
   - 
   - 

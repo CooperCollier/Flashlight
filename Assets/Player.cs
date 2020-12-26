@@ -15,7 +15,7 @@ public class Player : MonoBehaviour {
     [SerializeField]
     float speed;
 
-    static int MaxBattery = 4000;
+    static int MaxBattery = 5000;
 
     int timeToVanish = 150;
 
@@ -35,6 +35,8 @@ public class Player : MonoBehaviour {
     public GameObject brightObj;
     public GameObject stunObj;
     public ParticleSystem bleedParticles;
+    public GameObject darkShadowObj;
+    public GameObject brightShadowObj;
     public SpriteRenderer sprite;
 
     //--------------------------------------------------------------------------------
@@ -50,6 +52,8 @@ public class Player : MonoBehaviour {
         brightObj = transform.GetChild(1).gameObject;
         stunObj = transform.GetChild(2).gameObject;
         bleedParticles = transform.GetChild(3).gameObject.GetComponent<ParticleSystem>();
+        darkShadowObj = transform.GetChild(4).gameObject;
+        brightShadowObj = transform.GetChild(5).gameObject;
         battery = MaxBattery;
         money = 0;
         dead = false;
@@ -72,12 +76,18 @@ public class Player : MonoBehaviour {
 
     	if (Input.GetKey(KeyCode.Space) && battery > 0 && Time.timeScale != 0) {
     		darkObj.SetActive(false);
+            darkShadowObj.SetActive(false);
+            brightObj.SetActive(true);
+            brightShadowObj.SetActive(true);
             stunObj.SetActive(true);
     		battery -= 1;
     	} else {
+            darkObj.SetActive(true);
+            darkShadowObj.SetActive(true);
+            brightObj.SetActive(false);
+            brightShadowObj.SetActive(false);
             stunObj.SetActive(false);
-            darkObj.SetActive(true); // Uncomment this line!
-            brightObj.SetActive(true); // Uncomment this line!
+
         }
         
     }
@@ -117,7 +127,15 @@ public class Player : MonoBehaviour {
             money += 10;
             Destroy(other.gameObject);
         }
-        else if (other.tag == "Battery") {
+        if (other.tag == "Gem1") {
+            money += 30;
+            Destroy(other.gameObject);
+        }
+        if (other.tag == "Gem2") {
+            money += 50;
+            Destroy(other.gameObject);
+        }
+        if (other.tag == "Battery") {
             battery += (MaxBattery / 10);
             if (battery > MaxBattery) {
             	battery = MaxBattery;
