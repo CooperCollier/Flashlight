@@ -17,6 +17,8 @@ public class Player : MonoBehaviour {
 
     static int MaxBattery = 5000;
 
+    bool gameStarted = false;
+
     int timeToVanish = 150;
 
 	public static int battery;
@@ -142,18 +144,27 @@ public class Player : MonoBehaviour {
             }
             Destroy(other.gameObject);
         }
+        if (other.tag == "GameStart") {
+            gameStarted = true;
+        }
+        if (other.tag == "GameEnd" && gameStarted) {
+            gameEnd();
+        }
     }
 
     //--------------------------------------------------------------------------------
 
-    public void Die() {
+    public void gameEnd() {
+    	Debug.Log("Game Finished...");
+    	return;
+    }
 
+    public void Die() {
     	if (dead) { return; }
     	dead = true;
     	bleedParticles.Play();
     	rigidbody2D.isKinematic = true;
     	boxCollider2D.enabled = false;
-
     }
 
     //--------------------------------------------------------------------------------

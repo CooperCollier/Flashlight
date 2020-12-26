@@ -11,6 +11,8 @@ TagManager:
   - Door
   - Gem1
   - Gem2
+  - GameStart
+  - GameEnd
   layers:
   - Default
   - TransparentFX
