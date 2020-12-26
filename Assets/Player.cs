@@ -17,9 +17,11 @@ public class Player : MonoBehaviour {
 
     static int MaxBattery = 4000;
 
-	public static int battery;
+    int timeToVanish = 150;
 
+	public static int battery;
 	public static int money;
+	public static bool dead;
 
 	public Rigidbody2D rigidbody2D;
     public BoxCollider2D boxCollider2D;
@@ -32,8 +34,8 @@ public class Player : MonoBehaviour {
     public GameObject darkObj;
     public GameObject brightObj;
     public GameObject stunObj;
-
-    public ParticleSystem runDust;
+    public ParticleSystem bleedParticles;
+    public SpriteRenderer sprite;
 
     //--------------------------------------------------------------------------------
 
@@ -42,13 +44,15 @@ public class Player : MonoBehaviour {
     	spriteRenderer = GetComponent<SpriteRenderer>();
     	rigidbody2D = transform.GetComponent<Rigidbody2D>();
         boxCollider2D = transform.GetComponent<BoxCollider2D>();
+        sprite = GetComponent<SpriteRenderer>();
         transform.position = new Vector2(startX, startY);
         darkObj = transform.GetChild(0).gameObject;
         brightObj = transform.GetChild(1).gameObject;
         stunObj = transform.GetChild(2).gameObject;
-        runDust = transform.GetChild(3).gameObject.GetComponent<ParticleSystem>();
+        bleedParticles = transform.GetChild(3).gameObject.GetComponent<ParticleSystem>();
         battery = MaxBattery;
         money = 0;
+        dead = false;
 
     }
 
@@ -56,16 +60,24 @@ public class Player : MonoBehaviour {
 
     void Update() {
 
+    	if (dead) { 
+    		if (timeToVanish > 0) {
+        		timeToVanish -= 1;
+        		sprite.color = new Color(1f, 1f, 1f, (float) (timeToVanish * 0.005f));
+        	}
+        	return;
+        }
+
         Move();
 
-    	if (Input.GetKey(KeyCode.Space) && battery > 0) {
+    	if (Input.GetKey(KeyCode.Space) && battery > 0 && Time.timeScale != 0) {
     		darkObj.SetActive(false);
             stunObj.SetActive(true);
     		battery -= 1;
     	} else {
             stunObj.SetActive(false);
-            //darkObj.SetActive(true); // Uncomment this line!
-            //brightObj.SetActive(true); // Uncomment this line!
+            darkObj.SetActive(true); // Uncomment this line!
+            brightObj.SetActive(true); // Uncomment this line!
         }
         
     }
@@ -74,7 +86,6 @@ public class Player : MonoBehaviour {
 
     private void Move() {
 
-        runDust.Play();
         if (Input.GetKey(KeyCode.W)) {
             transform.Translate(Vector2.up * speed * Time.deltaTime);
             direction = Vector2.up;
@@ -95,8 +106,6 @@ public class Player : MonoBehaviour {
             direction = Vector2.right;
             Quaternion newRotation = Quaternion.Euler(0, 0, 270);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
-        } else {
-            runDust.Stop();
         }
 
     }
@@ -109,7 +118,10 @@ public class Player : MonoBehaviour {
             Destroy(other.gameObject);
         }
         else if (other.tag == "Battery") {
-            battery += (MaxBattery / 5);
+            battery += (MaxBattery / 10);
+            if (battery > MaxBattery) {
+            	battery = MaxBattery;
+            }
             Destroy(other.gameObject);
         }
     }
@@ -117,7 +129,13 @@ public class Player : MonoBehaviour {
     //--------------------------------------------------------------------------------
 
     public void Die() {
-        Debug.Log("Me Is Die Now.");
+
+    	if (dead) { return; }
+    	dead = true;
+    	bleedParticles.Play();
+    	rigidbody2D.isKinematic = true;
+    	boxCollider2D.enabled = false;
+
     }
 
     //--------------------------------------------------------------------------------
@@ -132,6 +150,10 @@ public class Player : MonoBehaviour {
 
     public static int GetMoney() {
         return money;
+    }
+
+    public static bool GetLife() {
+        return !dead;
     }
 
     //--------------------------------------------------------------------------------

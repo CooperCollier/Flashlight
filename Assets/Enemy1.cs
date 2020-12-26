@@ -8,8 +8,10 @@ public class Enemy1 : MonoBehaviour {
 
 	bool provoked = false;
 
+    bool done = false;
+
     bool dashing = false;
-    int MaxDashTime = 100;
+    int MaxDashTime = 40;
     int dashTime = 0;
 
 	[SerializeField]
@@ -35,10 +37,11 @@ public class Enemy1 : MonoBehaviour {
     }
 
     void OnCollisionStay2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Player") {
+        if (collision.gameObject.tag == "Player" && !stunned) {
             if (damageFrames >= 5) {
                 collision.gameObject.SendMessage("Die");
                 dashing = true;
+                dashTime = MaxDashTime;
             } else {
                 damageFrames += 1;
             }
@@ -59,6 +62,8 @@ public class Enemy1 : MonoBehaviour {
 
     void Update() {
 
+        if (done) { return; }
+
         totalFrames += 1;
         if (totalFrames > 1000) {
             totalFrames = 0;
@@ -74,8 +79,9 @@ public class Enemy1 : MonoBehaviour {
 
         if (dashTime > 0) {
             dashTime -= 1;
-        } else {
+        } else if (dashing) {
             dashing = false;
+            done = true;
         }
 
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -87,7 +93,7 @@ public class Enemy1 : MonoBehaviour {
         }
 
         if (dashing) {
-            rigidbody2D.velocity = new Vector2(0, speed * 4);
+            transform.Translate(Vector2.up * speed * 5 * Time.deltaTime);
             return;
         }
 
