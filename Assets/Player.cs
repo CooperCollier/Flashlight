@@ -1,50 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
     //--------------------------------------------------------------------------------
-
-	[SerializeField]
-    float startX;
-
-    [SerializeField]
-    float startY;
 
     [SerializeField]
     float speed;
 
     public Vector2 direction;
 
-    // If startDark is true, then the beginning darkness fade in is occuring.
-    bool startDark = false;
-    // If endDark is true, then the ending darkness fade in is occuring.
-    bool endDark = false;
-    // maxFadeInTime is the number of frames it takes to fade in darkness.
-    int maxFadeInTime = 2000;
-    // gameStarted is true if the player has entered the house.
     bool gameStarted = false;
-    // timeToVanish is the number of frames it takes for the player to dissappear on death.
-    float maxTimeToVanish = 250f;
-    float timeToVanish;
 
-    // dead is true if the player has died.
-    public static bool dead;
-    // finished is true if the game has been won.
-    public static bool finished;
+    bool goingUp = false;
+    bool goingDown = false;
+    bool ending = false;
+
+    float maxTimeToVanish = 1f;
+    float timeToVanish = 0f;
+
+    float maxFadeInTime = 2f;
+    float fadeInTime = 0f;
+
+    public static bool IsPlayerDead;
+
+    public static bool IsGameWon;
 
     static int MaxBattery = 5000;
 	public static int battery;
 	public static int money;
-    int fadeInTime;
 
     public GameObject CameraObj;
-    public GameObject darkObj;
-    public GameObject brightObj;
+    public GameObject flashlightObj;
     public GameObject stunObj;
-    public GameObject darkShadowObj;
-    public GameObject brightShadowObj;
+    public GameObject bleedParticlesObj;
     public GameObject darkScreenObj;
 
     public Rigidbody2D rigidbody2D;
@@ -54,31 +45,34 @@ public class Player : MonoBehaviour {
     public ParticleSystem bleedParticles;
     public SpriteRenderer darkScreenRenderer;
 
+    public static bool walking = false;
+    Vector2 previousFrameLocation;
+    Vector2 thisFrameLocation;
+
     //--------------------------------------------------------------------------------
 
     void Start() {
 
-        darkObj = transform.GetChild(0).gameObject;
-        brightObj = transform.GetChild(1).gameObject;
-        stunObj = transform.GetChild(2).gameObject;
-        bleedParticles = transform.GetChild(3).gameObject.GetComponent<ParticleSystem>();
-        darkShadowObj = transform.GetChild(4).gameObject;
-        brightShadowObj = transform.GetChild(5).gameObject;
-        darkScreenObj = transform.GetChild(6).gameObject;
+        bleedParticlesObj = transform.GetChild(0).gameObject;
+        darkScreenObj = transform.GetChild(1).gameObject;
+        stunObj = transform.GetChild(3).gameObject;
+        flashlightObj = transform.GetChild(4).gameObject;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = transform.GetComponent<Rigidbody2D>();
         boxCollider2D = transform.GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
-        transform.position = new Vector2(startX, startY);
+
         darkScreenRenderer = darkScreenObj.GetComponent<SpriteRenderer>();
+        bleedParticles = bleedParticlesObj.GetComponent<ParticleSystem>();
 
         battery = MaxBattery;
         money = 0;
-        dead = false;
-        finished = false;
+        IsPlayerDead = false;
+        IsGameWon = false;
 
-        darkObj.transform.localScale = new Vector3(3f, 3f, 3f);
+        thisFrameLocation = transform.position;
+        previousFrameLocation = transform.position;
 
     }
 
@@ -86,47 +80,46 @@ public class Player : MonoBehaviour {
 
     void Update() {
 
-        if (startDark && fadeInTime > 0) {
-            darkObj.transform.localScale -= new Vector3(0.001f, 0.001f, 0.001f);
-            fadeInTime -= 1;
-            if (fadeInTime == 0) {
-                startDark = false;
-            }
+        thisFrameLocation = transform.position;
+        if (previousFrameLocation == thisFrameLocation) {
+            walking = false;
+        } else {
+            walking = true;
         }
+        previousFrameLocation = thisFrameLocation;
 
-        if (endDark && fadeInTime > 0) {
+        if (fadeInTime > 0) {
             float ratio = (float) ((float) (maxFadeInTime - fadeInTime) / (float) maxFadeInTime);
             darkScreenRenderer.color = new Color(0f, 0f, 0f, ratio);
-            fadeInTime -= 2;
-            if (fadeInTime <= 0) {
-                finished = true;
+            fadeInTime -= Time.deltaTime;
+            if (fadeInTime <= 0 && ending) {
+                IsGameWon = true;
+            }
+            if (fadeInTime <= 0 && goingUp) {
+                SceneManager.LoadScene(1);
+            }
+            if (fadeInTime <= 0 && goingDown) {
+                SceneManager.LoadScene(2);
             }
         }
 
-    	if (dead) { 
-    		if (timeToVanish > 0) {
-        		timeToVanish -= 1f;
-        		sprite.color = new Color(1f, 1f, 1f, (float) (timeToVanish / maxTimeToVanish));
-        	}
-        	return;
+    	if (IsPlayerDead && timeToVanish > 0) {
+        	timeToVanish -= (float) Time.deltaTime;
+        	sprite.color = new Color(1f, 1f, 1f, (float) (timeToVanish / maxTimeToVanish));
+        } else if (IsPlayerDead && timeToVanish <= 0) {
+            return;
         }
 
         Move();
 
-    	if (Input.GetKey(KeyCode.Space) && battery > 0 && Time.timeScale != 0 && !endDark) {
-    		darkObj.SetActive(false);
-            darkShadowObj.SetActive(false);
-            brightObj.SetActive(true);
-            brightShadowObj.SetActive(true);
+    	if (Input.GetKey(KeyCode.Space) && battery > 0 &&
+         Time.timeScale != 0 && fadeInTime <= 0 && !IsPlayerDead) {
+    		flashlightObj.SetActive(true);
             stunObj.SetActive(true);
-    		battery -= 1;
+            battery -= 1;
     	} else {
-            darkObj.SetActive(true);
-            darkShadowObj.SetActive(true);
-            brightObj.SetActive(false);
-            brightShadowObj.SetActive(false);
+            flashlightObj.SetActive(false);
             stunObj.SetActive(false);
-
         }
         
     }
@@ -184,36 +177,29 @@ public class Player : MonoBehaviour {
         if (other.tag == "GameStart") {
             gameStarted = true;
         }
-        if (other.tag == "GameEnd" && gameStarted && !endDark) {
-            gameEnd();
-        }
-        if (other.tag == "BeginDarkness") {
-            startDark = true;
+        if (other.tag == "GameEnd" && gameStarted) {
             fadeInTime = maxFadeInTime;
-            other.enabled = false;
-        } if (other.tag == "Stairs") {
-            ChangeFloor();
+            ending = true;
+        } if (other.tag == "StairsUp") {
+            fadeInTime = maxFadeInTime;
+            goingUp = true;
+        }  if (other.tag == "StairsDown") {
+            fadeInTime = maxFadeInTime;
+            goingDown = true;
         }
     }
 
     //--------------------------------------------------------------------------------
 
-    public void gameEnd() {
-    	endDark = true;
-        fadeInTime = maxFadeInTime;
-    }
-
     public void Die() {
-    	if (dead) { return; }
-    	dead = true;
+    	if (IsPlayerDead) { return; }
+    	IsPlayerDead = true;
     	bleedParticles.Play();
     	rigidbody2D.isKinematic = true;
     	boxCollider2D.enabled = false;
+        flashlightObj.SetActive(false);
+        stunObj.SetActive(false);
     	timeToVanish = maxTimeToVanish;
-    }
-
-    public void ChangeFloor() {
-        //...
     }
 
     //--------------------------------------------------------------------------------
@@ -231,11 +217,15 @@ public class Player : MonoBehaviour {
     }
 
     public static bool GetLife() {
-        return !dead;
+        return !IsPlayerDead;
     }
 
     public static bool GetFinished() {
-        return finished;
+        return IsGameWon;
+    }
+
+    public static bool isWalking() {
+        return walking;
     }
 
     //--------------------------------------------------------------------------------

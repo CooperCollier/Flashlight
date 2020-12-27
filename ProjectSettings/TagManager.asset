@@ -14,7 +14,8 @@ TagManager:
   - GameStart
   - GameEnd
   - BeginDarkness
-  - Stairs
+  - StairsUp
+  - StairsDown
   layers:
   - Default
   - TransparentFX
