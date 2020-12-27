@@ -4902,10 +4902,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   aggroRadius: 10
-  MaxDashTime: 40
-  MaxStunTime: 500
+  MaxDashTime: 0.2
+  MaxStunTime: 5
   rigidbody2D: {fileID: 0}
   stunParticles: {fileID: 0}
+  boxCollider2D: {fileID: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!95 &8924547498314673083
 Animator:
   serializedVersion: 3

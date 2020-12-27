@@ -49,6 +49,8 @@ public class Player : MonoBehaviour {
     Vector2 previousFrameLocation;
     Vector2 thisFrameLocation;
 
+    public GameObject SpawnLocationObj;
+
     //--------------------------------------------------------------------------------
 
     void Start() {
@@ -57,6 +59,8 @@ public class Player : MonoBehaviour {
         darkScreenObj = transform.GetChild(1).gameObject;
         stunObj = transform.GetChild(3).gameObject;
         flashlightObj = transform.GetChild(4).gameObject;
+
+        SpawnLocationObj = GameObject.FindGameObjectWithTag("SpawnLocator");
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = transform.GetComponent<Rigidbody2D>();
@@ -203,6 +207,15 @@ public class Player : MonoBehaviour {
     }
 
     //--------------------------------------------------------------------------------
+
+    public void setLocation(int floor) {
+        Debug.Log("recieved");
+        if (floor == 1) {
+            transform.position = new Vector2(60, 40);
+        } else if (floor == 2) {
+            transform.position = new Vector2(230, 585);
+        }
+    }
 
     public static int GetBatteryPercent() {
     	if (battery <= 0) {

@@ -6,11 +6,6 @@ public class Enemy2 : Enemy {
 
 	//--------------------------------------------------------------------------------
 
-	[SerializeField]
-    LayerMask detectWall;
-
-	//--------------------------------------------------------------------------------
-
     public override void StunAction() {
         return;
     }

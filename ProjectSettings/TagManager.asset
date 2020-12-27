@@ -16,6 +16,7 @@ TagManager:
   - BeginDarkness
   - StairsUp
   - StairsDown
+  - SpawnLocator
   layers:
   - Default
   - TransparentFX

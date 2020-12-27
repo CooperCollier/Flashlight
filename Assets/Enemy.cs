@@ -13,28 +13,28 @@ public abstract class Enemy : MonoBehaviour {
     public int aggroRadius;
 
     [SerializeField]
-    int MaxDashTime;
+    float MaxDashTime;
 
     [SerializeField]
-    int MaxStunTime;
+    float MaxStunTime;
 
 	bool provoked = false;
 
     bool done = false;
 
     bool dashing = false;
-    int dashTime = 0;
-    int stunTime = 0;
+    float dashTime = 0;
+    float stunTime = 0;
     bool stunned = false;
-
-    int damageFrames = 0;
-    int totalFrames = 0;
 
 	Transform playerTransform;
     public Rigidbody2D rigidbody2D;
     public ParticleSystem stunParticles;
 
     public BoxCollider2D boxCollider2D;
+
+    [SerializeField]
+    public LayerMask wallLayer;
 
 	//--------------------------------------------------------------------------------
 
@@ -51,22 +51,15 @@ public abstract class Enemy : MonoBehaviour {
 
         if (done) { return; }
 
-        totalFrames += 1;
-        if (totalFrames > 1000) {
-            totalFrames = 0;
-        } else if (totalFrames % 50 == 0) {
-            damageFrames = 0;
-        }
-
         if (stunTime > 0) {
-            stunTime -= 1;
+            stunTime -= Time.deltaTime;
         } else {
             stunned = false;
             stunParticles.Stop();
         }
 
         if (dashTime > 0) {
-            dashTime -= 1;
+            dashTime -= Time.deltaTime;
         } else if (dashing) {
             dashing = false;
             done = true;
@@ -87,15 +80,19 @@ public abstract class Enemy : MonoBehaviour {
 
         if (provoked) {
 
-        	Vector2 move = (playerTransform.position - transform.position).normalized;
-        	float angle = Vector2.SignedAngle(Vector2.up, move);
-            Quaternion newRotation = Quaternion.Euler(0, 0, angle);
-            transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
+            if (stunned) {
+                StunAction();
+                return;
+            }
 
-            if (!stunned) {
-        	   transform.Translate(Vector2.up * speed * Time.deltaTime);
+            if (!CheckForWall(transform.position, playerTransform.position)) {
+                Vector2 move = (playerTransform.position - transform.position).normalized;
+        	    float angle = Vector2.SignedAngle(Vector2.up, move);
+                Quaternion newRotation = Quaternion.Euler(0, 0, angle);
+                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
+                transform.Translate(Vector2.up * speed * Time.deltaTime);
             } else {
-            	StunAction();
+                // Use Pathfinding
             }
 
         }
@@ -104,15 +101,23 @@ public abstract class Enemy : MonoBehaviour {
 
     //--------------------------------------------------------------------------------
 
+    
+    bool CheckForWall(Vector2 self, Vector2 player) {
+        Vector3 difference = player - self;
+        RaycastHit2D checkWall = Physics2D.BoxCast(boxCollider2D.bounds.center,
+                                                      boxCollider2D.bounds.size,
+                                                      0f,
+                                                      difference,
+                                                      difference.magnitude,
+                                                      wallLayer);
+        return (checkWall.collider != null);
+    }
+
     void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.tag == "Player" && !stunned) {
-            if (damageFrames >= 5) {
-                collision.gameObject.SendMessage("Die");
-                dashing = true;
-                dashTime = MaxDashTime;
-            } else {
-                damageFrames += 1;
-            }
+            collision.gameObject.SendMessage("Die");
+            dashing = true;
+            dashTime = MaxDashTime;
         } else if (collision.gameObject.tag == "Stunner" && !stunned) {
             stunned = true;
             stunTime = MaxStunTime;
