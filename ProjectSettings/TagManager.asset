@@ -18,6 +18,7 @@ TagManager:
   - StairsDown
   - SpawnLocator
   - Enemy1Blocker
+  - Trophy
   layers:
   - Default
   - TransparentFX

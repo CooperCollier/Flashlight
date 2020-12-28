@@ -7,7 +7,7 @@ public class Enemy1 : Enemy {
     //--------------------------------------------------------------------------------
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.tag == "Door") {
+        if (collision.gameObject.tag == "Door" || collision.gameObject.tag == "Enemy1Blocker") {
             transform.Translate(Vector2.down * speed * 5f * Time.deltaTime);
         }
     }

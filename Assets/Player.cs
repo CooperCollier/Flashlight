@@ -194,6 +194,10 @@ public class Player : MonoBehaviour {
             money += 50;
             Destroy(other.gameObject);
         }
+        if (other.tag == "Trophy") {
+            money += 200;
+            Destroy(other.gameObject);
+        }
         if (other.tag == "Battery") {
             battery += (MaxBattery / 10);
             if (battery > MaxBattery) {

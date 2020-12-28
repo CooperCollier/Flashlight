@@ -26,6 +26,7 @@ public class ButtonManager : MonoBehaviour {
     void Start() {
 
     	playerObj = GameObject.FindGameObjectsWithTag("Player")[0].gameObject;
+    	dead = false;
         paused = false;
         Time.timeScale = 1f;
         resumeButton.SetActive(false);
