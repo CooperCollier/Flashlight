@@ -4878,7 +4878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  aggroRadius: 10
+  aggroRadius: 8
   MaxDashTime: 0.2
   MaxStunTime: 5
   rigidbody2D: {fileID: 0}
@@ -4889,6 +4889,8 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 1024
+  stallTimeTotal: 10
+  stallTime: 0
 --- !u!95 &6376161643184805719
 Animator:
   serializedVersion: 3
@@ -4921,9 +4923,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0000076293945, y: -0.053599358}
+  m_Offset: {x: 0.0015563965, y: -0.053599358}
   serializedVersion: 2
-  m_Radius: 0.18921947
+  m_Radius: 0.21871948
 --- !u!114 &2569006243388534249
 MonoBehaviour:
   m_ObjectHideFlags: 0

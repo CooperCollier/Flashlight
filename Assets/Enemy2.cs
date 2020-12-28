@@ -7,6 +7,7 @@ public class Enemy2 : Enemy {
 	//--------------------------------------------------------------------------------
 
     public override void StunAction() {
+    	transform.position = previousFrameLocation;
         return;
     }
 

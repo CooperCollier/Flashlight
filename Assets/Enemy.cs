@@ -38,6 +38,9 @@ public abstract class Enemy : MonoBehaviour {
     [SerializeField]
     public LayerMask wallLayer;
 
+    public Vector2 previousFrameLocation;
+    public Vector2 thisFrameLocation;
+
 	//--------------------------------------------------------------------------------
 
     void Start() {
@@ -54,6 +57,9 @@ public abstract class Enemy : MonoBehaviour {
     void Update() {
 
         if (done) { return; }
+
+        thisFrameLocation = transform.position;
+        previousFrameLocation = thisFrameLocation;
 
         if (stunTime > 0) {
             stunTime -= Time.deltaTime;

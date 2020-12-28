@@ -48,6 +48,8 @@ public class Player : MonoBehaviour {
     public static bool walking = false;
     Vector2 previousFrameLocation;
     Vector2 thisFrameLocation;
+    Quaternion previousFrameRotation;
+    Quaternion thisFrameRotation;
 
     //--------------------------------------------------------------------------------
 
@@ -87,13 +89,13 @@ public class Player : MonoBehaviour {
         PlayerPrefs.SetInt("Money", 0);
         PlayerPrefs.SetFloat("Battery", MaxBattery);
 
-        //setLocation(2); //REMOVE THIS LINE
-
     }
 
     //--------------------------------------------------------------------------------
 
     void Update() {
+
+        Move();
 
         thisFrameLocation = transform.position;
         if (previousFrameLocation == thisFrameLocation) {
@@ -102,6 +104,9 @@ public class Player : MonoBehaviour {
             walking = true;
         }
         previousFrameLocation = thisFrameLocation;
+
+        thisFrameRotation = transform.rotation;
+        previousFrameRotation = thisFrameRotation;
 
         if (fadeInTime > 0) {
             float ratio = (float) ((float) (maxFadeInTime - fadeInTime) / (float) maxFadeInTime);
@@ -130,8 +135,6 @@ public class Player : MonoBehaviour {
         } else if (IsPlayerDead && timeToVanish <= 0) {
             return;
         }
-
-        Move();
 
     	if (Input.GetKey(KeyCode.Space) && battery > 0 &&
          Time.timeScale != 0 && fadeInTime <= 0 && !IsPlayerDead) {
@@ -169,6 +172,9 @@ public class Player : MonoBehaviour {
             direction = Vector2.right;
             Quaternion newRotation = Quaternion.Euler(0, 0, 270);
             transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
+        } else {
+            transform.position = previousFrameLocation;
+            transform.rotation = previousFrameRotation;
         }
 
     }

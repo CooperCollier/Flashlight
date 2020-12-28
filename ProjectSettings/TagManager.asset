@@ -17,6 +17,7 @@ TagManager:
   - StairsUp
   - StairsDown
   - SpawnLocator
+  - Enemy1Blocker
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - Walls
   - Stunner
   - Enemies
-  - 
+  - Enemy1Blocker
   - 
   - 
   - 
