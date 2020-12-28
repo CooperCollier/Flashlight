@@ -28,8 +28,8 @@ public class Player : MonoBehaviour {
 
     public static bool IsGameWon;
 
-    static int MaxBattery = 5000;
-	public static int battery;
+    static float MaxBattery = 20f;
+	public static float battery;
 	public static int money;
 
     public GameObject CameraObj;
@@ -49,8 +49,6 @@ public class Player : MonoBehaviour {
     Vector2 previousFrameLocation;
     Vector2 thisFrameLocation;
 
-    public GameObject SpawnLocationObj;
-
     //--------------------------------------------------------------------------------
 
     void Start() {
@@ -60,8 +58,6 @@ public class Player : MonoBehaviour {
         stunObj = transform.GetChild(3).gameObject;
         flashlightObj = transform.GetChild(4).gameObject;
 
-        SpawnLocationObj = GameObject.FindGameObjectWithTag("SpawnLocator");
-
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = transform.GetComponent<Rigidbody2D>();
         boxCollider2D = transform.GetComponent<BoxCollider2D>();
@@ -70,13 +66,28 @@ public class Player : MonoBehaviour {
         darkScreenRenderer = darkScreenObj.GetComponent<SpriteRenderer>();
         bleedParticles = bleedParticlesObj.GetComponent<ParticleSystem>();
 
-        battery = MaxBattery;
-        money = 0;
         IsPlayerDead = false;
         IsGameWon = false;
 
+        if (PlayerPrefs.GetInt("NextScene") == 0) {
+        	setLocation(0);
+        } else if (PlayerPrefs.GetInt("NextScene") == 1) {
+        	setLocation(1);
+        } else if (PlayerPrefs.GetInt("NextScene") == 2) {
+        	setLocation(2);
+        }
+
+        money = PlayerPrefs.GetInt("Money");
+        battery = PlayerPrefs.GetFloat("Battery");
+
         thisFrameLocation = transform.position;
         previousFrameLocation = transform.position;
+
+        PlayerPrefs.SetInt("NextScene", 0);
+        PlayerPrefs.SetInt("Money", 0);
+        PlayerPrefs.SetFloat("Battery", MaxBattery);
+
+        //setLocation(2); //REMOVE THIS LINE
 
     }
 
@@ -100,9 +111,15 @@ public class Player : MonoBehaviour {
                 IsGameWon = true;
             }
             if (fadeInTime <= 0 && goingUp) {
+            	PlayerPrefs.SetInt("NextScene", 1);
+                PlayerPrefs.SetInt("Money", money);
+                PlayerPrefs.SetFloat("Battery", battery);
                 SceneManager.LoadScene(1);
             }
             if (fadeInTime <= 0 && goingDown) {
+            	PlayerPrefs.SetInt("NextScene", 2);
+                PlayerPrefs.SetInt("Money", money);
+                PlayerPrefs.SetFloat("Battery", battery);
                 SceneManager.LoadScene(2);
             }
         }
@@ -120,7 +137,7 @@ public class Player : MonoBehaviour {
          Time.timeScale != 0 && fadeInTime <= 0 && !IsPlayerDead) {
     		flashlightObj.SetActive(true);
             stunObj.SetActive(true);
-            battery -= 1;
+            battery -= Time.deltaTime;
     	} else {
             flashlightObj.SetActive(false);
             stunObj.SetActive(false);
@@ -209,11 +226,12 @@ public class Player : MonoBehaviour {
     //--------------------------------------------------------------------------------
 
     public void setLocation(int floor) {
-        Debug.Log("recieved");
-        if (floor == 1) {
-            transform.position = new Vector2(60, 40);
+        if (floor == 0) {
+        	transform.position = new Vector2(56, -1);
+        } else if (floor == 1) {
+            transform.position = new Vector2(58, 40);
         } else if (floor == 2) {
-            transform.position = new Vector2(230, 585);
+            transform.position = new Vector2(231, 585);
         }
     }
 
@@ -221,7 +239,7 @@ public class Player : MonoBehaviour {
     	if (battery <= 0) {
     		return 0;
     	} else {
-    		return (100 * battery) / MaxBattery;
+    		return (int) ((100f * battery) / MaxBattery);
     	}
     }
 

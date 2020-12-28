@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public abstract class Enemy : MonoBehaviour {
 
@@ -30,8 +31,9 @@ public abstract class Enemy : MonoBehaviour {
 	Transform playerTransform;
     public Rigidbody2D rigidbody2D;
     public ParticleSystem stunParticles;
-
     public BoxCollider2D boxCollider2D;
+    public Seeker seeker;
+    public AIPath aiPath;
 
     [SerializeField]
     public LayerMask wallLayer;
@@ -42,6 +44,8 @@ public abstract class Enemy : MonoBehaviour {
         boxCollider2D = transform.GetComponent<BoxCollider2D>();
         rigidbody2D = transform.GetComponent<Rigidbody2D>();
         stunParticles = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
+        seeker = GetComponent<Seeker>();
+        aiPath = GetComponent<AIPath>();
         stunParticles.Stop();
     }
 
@@ -78,40 +82,21 @@ public abstract class Enemy : MonoBehaviour {
             return;
         }
 
-        if (provoked) {
-
-            if (stunned) {
-                StunAction();
-                return;
-            }
-
-            if (!CheckForWall(transform.position, playerTransform.position)) {
-                Vector2 move = (playerTransform.position - transform.position).normalized;
-        	    float angle = Vector2.SignedAngle(Vector2.up, move);
-                Quaternion newRotation = Quaternion.Euler(0, 0, angle);
-                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
-                transform.Translate(Vector2.up * speed * Time.deltaTime);
-            } else {
-                // Use Pathfinding
-            }
-
+        if (!provoked) {
+            seeker.enabled = false;
+            aiPath.enabled = false;
+        } else if (provoked && stunned) {
+            seeker.enabled = false;
+            aiPath.enabled = false;
+            StunAction();
+        } else if (provoked && !stunned) {
+            seeker.enabled = true;
+            aiPath.enabled = true;
         }
 
     }
 
     //--------------------------------------------------------------------------------
-
-    
-    bool CheckForWall(Vector2 self, Vector2 player) {
-        Vector3 difference = player - self;
-        RaycastHit2D checkWall = Physics2D.BoxCast(boxCollider2D.bounds.center,
-                                                      boxCollider2D.bounds.size,
-                                                      0f,
-                                                      difference,
-                                                      difference.magnitude,
-                                                      wallLayer);
-        return (checkWall.collider != null);
-    }
 
     void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.tag == "Player" && !stunned) {
