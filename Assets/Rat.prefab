@@ -164,7 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f17697eff6ec4ee7a1a02be69278296, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  aggroRadius: 10
+  speed: 1
+  aggroRadius: 4
   provoked: 0
-  provokeTime: 0
