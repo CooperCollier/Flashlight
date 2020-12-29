@@ -41,6 +41,11 @@ public abstract class Enemy : MonoBehaviour {
     public Vector2 previousFrameLocation;
     public Vector2 thisFrameLocation;
 
+    public AudioSource AudioFootsteps;
+    public AudioSource AudioAttack;
+
+    bool playerDead = false;
+
 	//--------------------------------------------------------------------------------
 
     void Start() {
@@ -50,6 +55,9 @@ public abstract class Enemy : MonoBehaviour {
         seeker = GetComponent<Seeker>();
         aiPath = GetComponent<AIPath>();
         stunParticles.Stop();
+
+        AudioFootsteps = transform.GetChild(1).gameObject.GetComponent<AudioSource>();
+        AudioAttack = transform.GetChild(2).gameObject.GetComponent<AudioSource>();
     }
 
     //--------------------------------------------------------------------------------
@@ -77,7 +85,7 @@ public abstract class Enemy : MonoBehaviour {
 
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         float distance = (transform.position - playerTransform.position).magnitude;
-        if (distance < aggroRadius) {
+        if (distance < aggroRadius && !playerDead) {
         	provoked = true;
         } else {
         	provoked = false;
@@ -91,13 +99,18 @@ public abstract class Enemy : MonoBehaviour {
         if (!provoked) {
             seeker.enabled = false;
             aiPath.enabled = false;
+            AudioFootsteps.Stop();
         } else if (provoked && stunned) {
             seeker.enabled = false;
             aiPath.enabled = false;
+            AudioFootsteps.Stop();
             StunAction();
         } else if (provoked && !stunned) {
             seeker.enabled = true;
             aiPath.enabled = true;
+            if (!AudioFootsteps.isPlaying) {
+                AudioFootsteps.Play();
+            }
         }
 
     }
@@ -106,9 +119,12 @@ public abstract class Enemy : MonoBehaviour {
 
     void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.tag == "Player" && !stunned) {
+            AudioFootsteps.Stop();
             collision.gameObject.SendMessage("Die");
             dashing = true;
             dashTime = MaxDashTime;
+            AudioAttack.Play();
+            playerDead = true;
         } else if (collision.gameObject.tag == "Stunner" && !stunned) {
             stunned = true;
             stunTime = MaxStunTime;

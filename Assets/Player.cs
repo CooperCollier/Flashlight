@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
 
     public static bool IsGameWon;
 
-    static float MaxBattery = 20f;
+    static float MaxBattery = 35f;
 	public static float battery;
 	public static int money;
 
@@ -51,6 +51,11 @@ public class Player : MonoBehaviour {
     Quaternion previousFrameRotation;
     Quaternion thisFrameRotation;
 
+    public GameObject AudioFootsteps;
+    public AudioSource AudioDoors;
+    public AudioSource AudioCoin;
+    public AudioSource AudioLight;
+
     //--------------------------------------------------------------------------------
 
     void Start() {
@@ -59,6 +64,11 @@ public class Player : MonoBehaviour {
         darkScreenObj = transform.GetChild(1).gameObject;
         stunObj = transform.GetChild(3).gameObject;
         flashlightObj = transform.GetChild(4).gameObject;
+
+        AudioFootsteps = transform.GetChild(6).gameObject;
+        AudioDoors = transform.GetChild(7).gameObject.GetComponent<AudioSource>();
+        AudioCoin = transform.GetChild(8).gameObject.GetComponent<AudioSource>();
+        AudioLight = transform.GetChild(9).gameObject.GetComponent<AudioSource>();
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigidbody2D = transform.GetComponent<Rigidbody2D>();
@@ -100,8 +110,10 @@ public class Player : MonoBehaviour {
         thisFrameLocation = transform.position;
         if (previousFrameLocation == thisFrameLocation) {
             walking = false;
+            AudioFootsteps.SetActive(false);
         } else {
             walking = true;
+            AudioFootsteps.SetActive(true);
         }
         previousFrameLocation = thisFrameLocation;
 
@@ -141,6 +153,7 @@ public class Player : MonoBehaviour {
     		flashlightObj.SetActive(true);
             stunObj.SetActive(true);
             battery -= Time.deltaTime;
+            AudioLight.Play();
     	} else {
             flashlightObj.SetActive(false);
             stunObj.SetActive(false);
@@ -183,20 +196,24 @@ public class Player : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Coin") {
-            money += 10;
+            money += 5;
             Destroy(other.gameObject);
+            AudioCoin.Play();
         }
         if (other.tag == "Gem1") {
             money += 30;
             Destroy(other.gameObject);
+            AudioCoin.Play();
         }
         if (other.tag == "Gem2") {
             money += 50;
             Destroy(other.gameObject);
+            AudioCoin.Play();
         }
         if (other.tag == "Trophy") {
             money += 200;
             Destroy(other.gameObject);
+            AudioCoin.Play();
         }
         if (other.tag == "Battery") {
             battery += (MaxBattery / 10);
@@ -204,6 +221,7 @@ public class Player : MonoBehaviour {
             	battery = MaxBattery;
             }
             Destroy(other.gameObject);
+            AudioCoin.Play();
         }
         if (other.tag == "GameStart") {
             gameStarted = true;
@@ -217,6 +235,12 @@ public class Player : MonoBehaviour {
         }  if (other.tag == "StairsDown") {
             fadeInTime = maxFadeInTime;
             goingDown = true;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Door") {
+            AudioDoors.Play();
         }
     }
 
