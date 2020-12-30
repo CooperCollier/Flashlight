@@ -105,10 +105,12 @@ public class Player : MonoBehaviour {
 
     void Update() {
 
+        rigidbody2D.velocity = new Vector2(0, 0);
+
         Move();
 
         thisFrameLocation = transform.position;
-        if (previousFrameLocation == thisFrameLocation) {
+        if ((previousFrameLocation == thisFrameLocation) || IsPlayerDead) {
             walking = false;
             AudioFootsteps.SetActive(false);
         } else {
@@ -222,7 +224,7 @@ public class Player : MonoBehaviour {
             }
             Destroy(other.gameObject);
             AudioCoin.Play();
-        }
+        } 
         if (other.tag == "GameStart") {
             gameStarted = true;
         }

@@ -64,6 +64,10 @@ public abstract class Enemy : MonoBehaviour {
 
     void Update() {
 
+    	if (!Player.GetLife()) {
+    		playerDead = true;
+    	}
+
         if (done) { return; }
 
         thisFrameLocation = transform.position;
@@ -116,6 +120,20 @@ public abstract class Enemy : MonoBehaviour {
     }
 
     //--------------------------------------------------------------------------------
+
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Player" && !stunned) {
+            AudioFootsteps.Stop();
+            collision.gameObject.SendMessage("Die");
+            dashing = true;
+            dashTime = MaxDashTime;
+            AudioAttack.Play();
+            playerDead = true;
+        } else if (collision.gameObject.tag == "Stunner" && !stunned) {
+            stunned = true;
+            stunTime = MaxStunTime;
+        }
+    }
 
     void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.tag == "Player" && !stunned) {

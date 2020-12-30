@@ -316,7 +316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9.5554, y: 316}
+  m_AnchoredPosition: {x: -0.000020027, y: 330.46}
   m_SizeDelta: {x: 375.84656, y: 86.3078}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97648673
@@ -523,7 +523,9 @@ RectTransform:
   - {fileID: 1618535002}
   - {fileID: 2068103775}
   - {fileID: 917839773}
+  - {fileID: 1479060665}
   - {fileID: 291459821}
+  - {fileID: 349130245}
   - {fileID: 1070908095}
   m_Father: {fileID: 720012717}
   m_RootOrder: 6
@@ -563,12 +565,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 247499406}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -297.68, y: -191.9}
-  m_SizeDelta: {x: 420.07117, y: 81.01773}
+  m_AnchoredPosition: {x: -304, y: -246.79}
+  m_SizeDelta: {x: 775.93555, y: 47.354904}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &291459822
 MonoBehaviour:
@@ -816,6 +818,85 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &349130244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 349130245}
+  - component: {fileID: 349130247}
+  - component: {fileID: 349130246}
+  m_Layer: 5
+  m_Name: HelpText5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &349130245
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349130244}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 247499406}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -234.12, y: -179}
+  m_SizeDelta: {x: 862.111, y: 88.22472}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &349130246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349130244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: f198e75bc49044f34aad2561a40fae77, type: 3}
+    m_FontSize: 36
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: The monsters have either red or green eyes. Be especially careful around
+    green-eyed ones, since they can outrun you.
+--- !u!222 &349130247
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349130244}
+  m_CullTransparentMesh: 0
 --- !u!1 &377845046
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,8 +1656,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 316.6, y: 134.75014}
-  m_SizeDelta: {x: 594.8176, y: 228.49359}
+  m_AnchoredPosition: {x: -13.661, y: -73.234}
+  m_SizeDelta: {x: 1303.0293, y: 123.30788}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &917839774
 MonoBehaviour:
@@ -1604,15 +1685,16 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Use WASD to move. Use spacebar to turn on your flashlight and temporarily
-    stun any evil spirits. Be careful--your flashlight battery is limited and can
-    only be recharged with batteries you can find around the house.
+    stun nearby monsters. Be careful--your flashlight battery is limited and can
+    only be recharged with batteries you can find around the house. The battery level
+    is displayed in the upper left.
 --- !u!222 &917839775
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1653,12 +1735,12 @@ RectTransform:
   m_Children:
   - {fileID: 767963052}
   m_Father: {fileID: 247499406}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 425, y: -158}
-  m_SizeDelta: {x: 303.63458, y: 98.16554}
+  m_AnchoredPosition: {x: 536.7, y: -225}
+  m_SizeDelta: {x: 202.30206, y: 69.311676}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1070908096
 MonoBehaviour:
@@ -1829,6 +1911,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457980962}
   m_CullTransparentMesh: 0
+--- !u!1 &1479060664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1479060665}
+  - component: {fileID: 1479060667}
+  - component: {fileID: 1479060666}
+  m_Layer: 5
+  m_Name: HelpText6
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1479060665
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479060664}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 247499406}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -124.72, y: 157.39}
+  m_SizeDelta: {x: 1080.9194, y: 85.30333}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1479060666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479060664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
+  m_RaycastTarget: 1
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: f198e75bc49044f34aad2561a40fae77, type: 3}
+    m_FontSize: 36
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: The more loot you leave the house with, the better. For a real challenge,
+    try to collect the golden trophy hidden somewhere deep inside the house.
+--- !u!222 &1479060667
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1479060664}
+  m_CullTransparentMesh: 0
 --- !u!1 &1618535001
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,8 +2024,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -377.24, y: 135.35}
-  m_SizeDelta: {x: 572.9241, y: 227.29388}
+  m_AnchoredPosition: {x: -97.962, y: 247}
+  m_SizeDelta: {x: 1134.4349, y: 80.61658}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1618535003
 MonoBehaviour:
@@ -1892,15 +2053,14 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 48
-    m_Alignment: 1
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Search through an abandoned house and pick up as much money as you can.
-    The house is populated with evil spirits (and harmless rats) that fear only the
-    light. Once you've gotten enough loot, try to get back outside in one piece.
+  m_Text: Search through an abandoned house and pick up as much money as you can.        
+    Once you think you've gotten enough loot, try to get back outside in one piece.
 --- !u!222 &1618535004
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1943,8 +2103,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -297.68, y: -82}
-  m_SizeDelta: {x: 732.05365, y: 138.7895}
+  m_AnchoredPosition: {x: -20.874, y: 32.369}
+  m_SizeDelta: {x: 1288.6025, y: 164.73805}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2068103776
 MonoBehaviour:
@@ -1972,14 +2132,15 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The more loot you leave the house with, the better. For a real challenge,
-    try to collect the golden trophy hidden somewhere deep inside the house.
+  m_Text: 'The house is populated with monsters that can kill you on contact. From
+    time to time you may also come across harmless rats. The monsters can be stunned
+    for about 5 seconds by shining your flashlight at them. '
 --- !u!222 &2068103777
 CanvasRenderer:
   m_ObjectHideFlags: 0
